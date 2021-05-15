@@ -6,11 +6,20 @@ const User = require('../user/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-const localStorage = require('node-localstorage');
+const app = express();
+
+const LocalStorage = require('node-localstorage').LocalStorage;
+localStorage = new LocalStorage('./scratch');
 
 const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
+const session = require('express-session');
+
+router.use(session({secret: 'edurekaSecert1', resave: false, saveUninitialized: true}));
+app.use(express.static(__dirname+'/public'));
+app.set('view engine', 'ejs');
+app.set('views', './views');
 // Register without JWT validation
 // router.post('/register', function (req,res) {
 //         //add new user
@@ -76,9 +85,9 @@ router.post('/login', (req, res) => {
         // console.log('admin:'+req.session.isLoggedIn)
         // res.redirect(`/home`)
 
-        localStorage.setItem('authtoken', token);
+        localStorage.setItem()
         res.redirect(`/users/profile`);
-        res.send({auth: true, token: token});
+        //res.send({auth: true, token: token});
       }
     });
 });
